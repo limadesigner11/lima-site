@@ -1,0 +1,390 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Projetos - Matheus Lima</title>
+<script src="/support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400..700&amp;display=swap" rel="stylesheet">
+<style>
+html{scroll-behavior:smooth}
+body{margin:0;background:#000;color:#fff;font-family:'Inter',system-ui,sans-serif;font-optical-sizing:auto;-webkit-font-smoothing:antialiased}
+*{box-sizing:border-box}
+h1,h2,h3,p{margin:0}
+a{color:inherit}
+button{font-family:inherit}
+:focus-visible{outline:2px solid #fff;outline-offset:3px}
+
+.nav a{font-size:15px;font-weight:500;letter-spacing:-0.3px;text-transform:uppercase;text-decoration:none;color:#fff;transition:opacity .25s ease}
+.nav a:hover{opacity:.6}
+
+.btn{transition:transform .25s ease}
+.btn:hover{transform:translateY(-2px)}
+.btn .arr{transition:transform .25s ease}
+.btn:hover .arr{transform:translate(2px,-2px)}
+
+/* CTA: título cinza -> branco no hover, e o botão aparece (em telas com mouse). Em toque, tudo fica visível. */
+.cta-block .cta-title{color:#B3B3B3;transition:color .35s ease}
+.cta-block .cta-btn{transition:opacity .35s ease,transform .35s ease}
+.cta-block:hover .cta-title,.cta-block:focus-within .cta-title{color:#fff}
+@media (hover:hover){
+  .cta-block .cta-btn{opacity:0;transform:translateY(10px);pointer-events:none}
+  .cta-block:hover .cta-btn,.cta-block:focus-within .cta-btn{opacity:1;transform:none;pointer-events:auto}
+  .cta-block:hover .cta-btn:hover{transform:translateY(-2px)}
+}
+@media (hover:none){
+  .cta-block .cta-title{color:#fff}
+}
+
+.card .arrow{transition:background .25s ease,color .25s ease}
+.card:hover .arrow{background:#fff !important;color:#000 !important}
+.card .mock{transition:transform .6s ease,filter .5s ease}
+.card .plogo{transition:transform .6s cubic-bezier(.22,1,.36,1)}
+.card:hover .mock,.card:focus-visible .mock{transform:scale(1.04);filter:blur(10px) brightness(.55)}
+.card:hover .plogo,.card:focus-visible .plogo{transform:translate(-50%,-50%) scale(1.06)}
+
+.client{transition:transform .3s ease,background .3s ease}
+.client:hover{transform:translateY(-3px);background:#F2F2F2 !important}
+
+.svc-btn .svc-circle{transition:background .25s ease}
+.svc-btn:hover .svc-circle{background:rgba(255,255,255,.34) !important}
+
+.foot a{text-decoration:none;transition:opacity .25s ease}
+.foot a.lnk:hover{opacity:.65}
+.social{transition:transform .25s ease,background .25s ease}
+.social:hover{background:#D6D6D6 !important;transform:translateY(-2px)}
+.circle-btn{transition:background .25s ease}
+.circle-btn:hover{background:rgba(255,255,255,.35) !important}
+
+/* entrada suave ao rolar (só onde há suporte a view timeline; sem suporte, o conteúdo já aparece normal) */
+/* Troca de palavras: a atual sobe borrada e a próxima entra por baixo */
+.swap{display:inline-grid;vertical-align:top;color:#fff}
+.swap>span{grid-area:1/1;opacity:0;animation:dcSwap 7.8s cubic-bezier(.22,1,.36,1) infinite both}
+.swap>span:nth-child(2){animation-delay:2.6s}
+.swap>span:nth-child(3){animation-delay:5.2s}
+@keyframes dcSwap{0%{opacity:0;transform:translateY(70%);filter:blur(10px)}7%{opacity:1;transform:none;filter:blur(0)}28%{opacity:1;transform:none;filter:blur(0)}35%{opacity:0;transform:translateY(-70%);filter:blur(10px)}100%{opacity:0;transform:translateY(-70%);filter:blur(10px)}}
+@media (prefers-reduced-motion:reduce){.swap>span{animation:none}.swap>span:first-child{opacity:1}}
+@keyframes dcRise{from{opacity:0;transform:translateY(40px);filter:blur(8px)}to{opacity:1;transform:none;filter:blur(0)}}
+@keyframes dcIn{from{opacity:0;transform:translateY(24px);filter:blur(8px)}to{opacity:1;transform:none;filter:blur(0)}}
+/* troca de depoimento: sai borrando para um lado, entra vindo do outro */
+.fb-q.fb-out{animation:fbOut .28s ease both}
+.fb-q.fb-in{animation:fbIn .7s cubic-bezier(.22,1,.36,1) both}
+.fb-q.fb-in+*,.fb-q.fb-in{--fbx:var(--dir,1)}
+@keyframes fbOut{to{opacity:0;transform:translateX(calc(var(--dir,1) * -36px));filter:blur(8px)}}
+@keyframes fbIn{from{opacity:0;transform:translateX(calc(var(--dir,1) * 36px));filter:blur(8px)}to{opacity:1;transform:none;filter:blur(0)}}
+@media (prefers-reduced-motion:reduce){.fb-q.fb-out,.fb-q.fb-in{animation:none}}
+/* cards do histórico: ao expandir, os novos descem em cascata com leve zoom e blur */
+.jobs.open .job:nth-child(n+2){animation:jobIn .7s cubic-bezier(.22,1,.36,1) backwards}
+.jobs.open .job:nth-child(2){animation-delay:.04s}
+.jobs.open .job:nth-child(3){animation-delay:.12s}
+.jobs.open .job:nth-child(4){animation-delay:.2s}
+.jobs.open .job:nth-child(5){animation-delay:.28s}
+.jobs.open .job:nth-child(n+6){animation-delay:.36s}
+@keyframes jobIn{from{opacity:0;transform:translateY(-22px) scale(.96);filter:blur(6px)}to{opacity:1;transform:none;filter:blur(0)}}
+@media (prefers-reduced-motion:reduce){.jobs.open .job{animation:none !important}}
+@keyframes dcFade{from{opacity:0}to{opacity:1}}
+@supports (animation-timeline:view()){
+  .reveal{animation:none}
+}
+/* revelar ao entrar na tela: o JS marca os elementos (.rv) e dispara (.rv-in) quando aparecem */
+.rv{opacity:0}
+.rv.rv-in{animation:dcRise 1s cubic-bezier(.22,1,.36,1) var(--rvd,0s) both}
+/* entrada ao carregar: logo, menu, título e botão do topo, em sequência */
+.hd>a{animation:dcFade .9s ease .05s backwards}
+.nav a{animation:dcIn .8s cubic-bezier(.22,1,.36,1) backwards}
+.nav a:nth-child(1){animation-delay:.2s}
+.nav a:nth-child(2){animation-delay:.3s}
+.nav a:nth-child(3){animation-delay:.4s}
+.hero-title{animation:dcIn 1s cubic-bezier(.22,1,.36,1) .45s backwards}
+.hb .btn{animation:dcIn 1s cubic-bezier(.22,1,.36,1) .65s backwards}
+
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .rv,.reveal,.hd>a,.nav a,.hero-title,.hb .btn{animation:none !important;opacity:1 !important;transform:none !important;filter:none !important}
+  .btn,.btn .arr,.card .mock,.card .arrow,.client,.social{transition:none !important}
+}
+
+@media (max-width:1000px){
+  .px110{padding-left:32px !important;padding-right:32px !important}
+  .px64{padding-left:0 !important;padding-right:0 !important}
+  .sec{padding-left:24px !important;padding-right:24px !important}
+  .cols4{grid-template-columns:repeat(2,minmax(0,1fr)) !important;gap:40px 32px !important}
+  .clients{grid-template-columns:repeat(2,minmax(0,1fr)) !important}
+  .fb-pad{padding-left:24px !important;padding-right:24px !important}
+  .logo-svg{width:110px !important;height:auto !important}
+  .hero-frame{left:32px !important;right:32px !important}
+}
+@media (max-width:640px){
+  .px110{padding-left:20px !important;padding-right:20px !important}
+  .px110.hd{padding-top:28px !important}
+  .px110.hb{padding-bottom:44px !important}
+  .hero-frame{inset:12px 12px 12px 12px !important}
+  .hero-frame img{object-position:63% 30% !important}
+  .hero-title{font-size:18px !important}
+  .logo-svg{width:76px !important}
+  .cols4{grid-template-columns:minmax(0,1fr) !important}
+  .proj{grid-template-columns:minmax(0,1fr) !important; width:min(714px,calc(100vw - 48px)) !important}
+  .nav{gap:14px !important}
+  .nav a{font-size:12px}
+  .foot3{grid-template-columns:minmax(0,1fr) !important}
+  .foot-menu{grid-template-columns:repeat(2,minmax(0,1fr)) !important}
+}
+
+/* página de projetos */
+.ftab{background:linear-gradient(#fff,#fff) no-repeat left bottom/0% 1px;border:0;padding:0 0 4px;font-size:clamp(20px,2.2vw,28px);font-weight:500;letter-spacing:-0.04em;color:#8F8F8F;cursor:pointer;transition:color .3s ease,background-size .5s cubic-bezier(.22,1,.36,1),transform .25s ease;animation:dcRise .9s cubic-bezier(.22,1,.36,1) backwards;animation-delay:calc(.35s + var(--i,0) * .08s)}
+.ftab:hover{color:#D6D6D6;background-size:35% 1px}
+.ftab:active{transform:scale(.95)}
+.ftab[aria-pressed="true"]{color:#fff;background-size:100% 1px}
+.pcard:not([data-seen]){opacity:0}
+.hsplit{opacity:0}
+.hsplit.ready{opacity:1}
+.hsplit .wd{display:inline-block;opacity:0;transform:translateY(.55em);filter:blur(8px);animation:wdIn 1s cubic-bezier(.22,1,.36,1) calc(.15s + var(--w,0) * .045s) forwards}
+@keyframes wdIn{to{opacity:1;transform:none;filter:blur(0)}}
+@media (prefers-reduced-motion:reduce){.pcard:not([data-seen]){opacity:1}.hsplit{opacity:1}.hsplit .wd{animation:none;opacity:1;transform:none;filter:none}.ftab{animation:none;transition:color .2s}}
+.nav a[aria-current="page"]{opacity:1;text-decoration:underline;text-underline-offset:6px}
+</style>
+</helmet>
+
+<main id="topo" style="background:#000;color:#fff;font-family:'Inter',system-ui,sans-serif">
+
+<header class="px110 hd" style="max-width:1200px;margin:0 auto;padding:64px 110px 0;display:flex;align-items:flex-start;justify-content:space-between">
+  <a href="/" aria-label="Matheus Lima - início">
+      <svg class="logo-svg" width="150" height="128" viewBox="0 0 108 92" fill="none" aria-hidden="true">
+        <path d="M34 3H75L45 65H3Z" stroke="#fff" stroke-width="3" stroke-linejoin="round"></path>
+        <path d="M42 60H104L90 88H28Z" fill="#fff" stroke="#fff" stroke-width="5" stroke-linejoin="round"></path>
+      </svg>
+    </a>
+  <nav class="nav" aria-label="Principal" style="display:flex;gap:24px;padding-top:6px">
+    <a href="/">Início</a>
+    <a href="/projetos" aria-current="page">Projetos</a>
+    <a href="https://api.whatsapp.com/send?phone=5541984984966&amp;text=Achamos%20seu%20curr%C3%ADculo%20incr%C3%ADvel%20Matheus,%20quero%20entrar%20em%20contato%20contigo!" target="_blank" rel="noopener noreferrer">Contato</a>
+  </nav>
+</header>
+
+<section class="sec" style="padding:120px 40px 0">
+  <div style="max-width:980px;margin:0 auto;display:flex;flex-direction:column;gap:72px">
+    <h1 class="px64 hsplit" style="max-width: 880px; padding: 0; font-size: clamp(28px,3.5vw,42px); font-weight: 400; line-height: 1.3; letter-spacing: -0.04em; color: #A3A3A3; text-wrap: balance"><span style="color:#fff">Projetos que transformam desafios complexos</span> em experiências digitais simples, intuitivas e relevantes.</h1>
+
+    <div class="px64" role="group" aria-label="Filtrar projetos por categoria" style="padding:0;display:flex;flex-wrap:wrap;gap:12px 28px">
+      <sc-for list="{{filters}}" as="f" hint-placeholder-count="5">
+        <button class="ftab" type="button" style="--i: {{f.i}}; font-size: 32px" onClick="{{ f.pick }}" aria-pressed="{{ f.active }}">{{f.label}}</button>
+      </sc-for>
+    </div>
+
+    <div id="lista" class="proj" style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:62px 12px;align-self:center;width:min(1440px,calc(100vw - 80px))">
+      <sc-for list="{{visible}}" as="p" hint-placeholder-count="4">
+        <a class="card pcard" href="{{p.href}}" style="position:relative;display:block;overflow:hidden;border-radius:16px;aspect-ratio:587/678;background:{{p.bg}};text-decoration:none;color:#fff">
+          <div style="position:absolute;top:32px;left:32px;right:32px;display:flex;flex-wrap:wrap;gap:8px;z-index:2">
+            <sc-for list="{{p.tags}}" as="t" hint-placeholder-count="2">
+              <span style="padding:6px 16px;border-radius:999px;background:rgba(255,255,255,.24);font-size:16px;font-weight:500;letter-spacing:-0.04em">{{t}}</span>
+            </sc-for>
+          </div>
+          <sc-if value="{{ p.img }}" hint-placeholder-val="{{ true }}">
+            <img class="mock" src="{{p.img}}" alt="Mockup do projeto {{p.name}}" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block">
+          </sc-if>
+          <img class="plogo" src="{{p.logo}}" alt="Logo {{p.name}}" style="position:absolute;left:50%;top:50%;width:{{p.logoW}};height:auto;transform:translate(-50%,-50%);z-index:1;pointer-events:none;filter:{{p.logoFilter}}">
+          <div style="position:absolute;left:0;right:0;bottom:0;height:34%;background:linear-gradient(180deg,rgba(0,0,0,0),rgba(0,0,0,.6))"></div>
+          <div style="position:absolute;left:32px;right:32px;bottom:32px;display:flex;align-items:flex-end;justify-content:space-between;gap:16px;z-index:2">
+            <h3 style="max-width:376px;font-size:28px;font-weight:500;line-height:1.3;letter-spacing:-0.04em;color:#FAFAFA">{{p.title}}</h3>
+            <span class="arrow" style="flex:none;width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.24);color:#fff;display:inline-flex;align-items:center;justify-content:center"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11L11 3M5 3h6v6"></path></svg></span>
+          </div>
+        </a>
+      </sc-for>
+    </div>
+
+    <sc-if value="{{ showMore }}" hint-placeholder-val="{{ true }}">
+      <div style="display:flex;justify-content:center">
+        <button class="btn" type="button" onClick="{{ more }}" style="display:inline-flex;align-items:center;gap:14px;height:64px;padding:0 15px 0 32px;border:0;background:#fff;border-radius:40px;color:#000;font-size:16px;font-weight:600;letter-spacing:-0.04em;cursor:pointer">
+          <span>Ver mais</span>
+          <span style="display:inline-flex;width:34px;height:34px;border-radius:50%;background:{{accent}};align-items:center;justify-content:center"><svg class="arr" width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11L11 3M5 3h6v6"></path></svg></span>
+        </button>
+      </div>
+    </sc-if>
+  </div>
+</section>
+
+<!-- CTA + RODAPÉ -->
+<section id="contato" class="foot" style="position:relative;z-index:1;background:#000;padding:160px 16px 0;overflow:hidden">
+  <div style="max-width:992px;margin:0 auto">
+
+    <div class="cta-block reveal" style="display:flex;flex-direction:column;align-items:center;gap:44px;text-align:center;padding:24px 0">
+      <h2 class="cta-title" style="max-width:13em;font-size:clamp(40px,6.3vw,80px);font-weight:500;line-height:1.05;letter-spacing:-0.04em">Vamos criar algo incrível juntos.</h2>
+      <a class="btn cta-btn" href="https://api.whatsapp.com/send?phone=5541984984966&amp;text=Achamos%20seu%20curr%C3%ADculo%20incr%C3%ADvel%20Matheus,%20quero%20entrar%20em%20contato%20contigo!" style="display:inline-flex;align-items:center;gap:14px;height:64px;padding:0 15px 0 32px;background:#fff;border-radius:40px;color:#000;text-decoration:none;font-size:16px;font-weight:600;letter-spacing:-0.04em">
+        <span>Entrar em contato</span>
+        <span style="display:inline-flex;width:34px;height:34px;border-radius:50%;background:{{accent}};align-items:center;justify-content:center"><svg class="arr" width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11L11 3M5 3h6v6"></path></svg></span>
+      </a>
+    </div>
+
+    <div class="reveal" style="margin-top:140px">
+      <p style="font-size:clamp(30px,4.4vw,56px);font-weight:500;line-height:1.02;letter-spacing:-0.04em;color:#fff">Com <span class="swap" aria-label="design, criatividade, modernidade"><span aria-hidden="true">design</span><span aria-hidden="true">criatividade</span><span aria-hidden="true">modernidade</span></span></p>
+      <p style="font-size:clamp(30px,4.4vw,56px);font-weight:500;line-height:1.02;letter-spacing:-0.04em;color:{{accent}}">Vamos criar experiências incríveis.</p>
+    </div>
+
+    <div class="foot3" style="margin-top:52px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:32px 24px">
+      <div>
+        <div style="font-size:14px;font-weight:500;color:#8F8F8F">Email</div>
+        <a class="lnk" href="mailto:limadesignerux@gmail.com" style="display:inline-block;margin-top:6px;font-size:16px;font-weight:500;color:#fff;overflow-wrap:anywhere">limadesignerux@gmail.com</a>
+      </div>
+      <div>
+        <div style="font-size:14px;font-weight:500;color:#8F8F8F">Entrar em contato</div>
+        <a class="lnk" href="https://wa.me/5541984984966?text=Quero%20criar%20uma%20experi%C3%AAncia%20incr%C3%ADvel" style="display:inline-block;margin-top:6px;font-size:16px;font-weight:500;color:#fff">Criar algo incrível</a>
+      </div>
+      <div>
+        <div style="font-size:14px;font-weight:500;color:#8F8F8F">Redes sociais</div>
+        <div style="margin-top:10px;display:flex;gap:8px">
+          <a class="social" href="https://www.linkedin.com/in/matheuslimaux/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" style="width:32px;height:32px;border-radius:50%;background:#fff;color:#000;display:inline-flex;align-items:center;justify-content:center"><svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><circle cx="4.6" cy="4.8" r="1.6"></circle><rect x="3.3" y="7.6" width="2.6" height="8.6" rx=".3"></rect><path d="M8.3 7.6h2.5v1.2c.5-.8 1.4-1.4 2.7-1.4 2.4 0 3 1.6 3 3.7v5.1h-2.6v-4.5c0-1.1-.1-2-1.3-2-1.3 0-1.7.9-1.7 2v4.5H8.3z"></path></svg></a>
+          <a class="social" href="https://www.behance.net/lima-designs" aria-label="Behance" style="width:32px;height:32px;border-radius:50%;background:#fff;color:#000;display:inline-flex;align-items:center;justify-content:center"><svg width="18" height="14" viewBox="0 0 18 14" aria-hidden="true"><text x="0" y="11.5" font-family="Inter,sans-serif" font-size="12" font-weight="800" fill="currentColor">Bē</text></svg></a>
+          <a class="social" href="https://medium.com/@limadesigner" aria-label="Medium" style="width:32px;height:32px;border-radius:50%;background:#fff;color:#000;display:inline-flex;align-items:center;justify-content:center"><svg width="17" height="17" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><ellipse cx="5.6" cy="10" rx="4" ry="4.6"></ellipse><ellipse cx="13.2" cy="10" rx="2.2" ry="4.4"></ellipse><rect x="17.2" y="5.6" width="1.5" height="8.8" rx=".75"></rect></svg></a>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:44px;padding-top:30px;border-top:1px solid rgba(255,255,255,.14)">
+      <div style="font-size:14px;font-weight:500;color:#8F8F8F">Menu</div>
+      <div class="foot-menu" style="margin-top:16px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px 24px;font-size:16px;font-weight:500">
+        <a class="lnk" href="#topo">Projetos</a>
+        <a class="lnk" href="https://www.behance.net/lima-designs">Serviços completos</a>
+        <span></span>
+        <a class="lnk" href="https://wa.me/5541984984966?text=Quero%20criar%20uma%20experi%C3%AAncia%20incr%C3%ADvel">Contato</a>
+        <a class="lnk" href="https://medium.com/@limadesigner">Reflexões</a>
+        <span style="font-size:14px;font-weight:500;color:#A3A3A3">© 2026 Matheus Lima</span>
+      </div>
+    </div>
+
+    <!-- assinatura tipográfica: ocupa a largura do conteúdo e é cortada embaixo -->
+    <div aria-hidden="true" style="margin-top:56px;-webkit-mask-image:linear-gradient(180deg,#000 30%,rgba(0,0,0,0) 100%);mask-image:linear-gradient(180deg,#000 30%,rgba(0,0,0,0) 100%)">
+      <div style="aspect-ratio:8339/700;overflow:hidden">
+        <img src="/assets/a868951a07e9f7c629ccfb560745090a.svg" alt="" style="display:block;width:100%;height:auto">
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"accent":{"editor":"color","default":"#B51208","options":["#B51208","#E0301E","#1F4FFF","#0E8A5F"]}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { filter: 'Todos', count: 4 };
+  }
+  componentDidMount() {
+    let reduce = false;
+    try { reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) {}
+    if (!reduce) { setTimeout(() => this.setupReveal(), 60); setTimeout(() => this.splitHeading(), 30); setTimeout(() => this.revealCards(true), 80); }
+  }
+  splitHeading() {
+    const h = document.querySelector('.hsplit');
+    if (!h) return;
+    try {
+      let n = 0;
+      h.setAttribute('aria-label', h.textContent.trim());
+      const walk = (node) => {
+        Array.from(node.childNodes).forEach(c => {
+          if (c.nodeType === 3) {
+            const frag = document.createDocumentFragment();
+            c.textContent.split(/(\s+)/).forEach(t => {
+              if (!t) return;
+              if (/^\s+$/.test(t)) { frag.appendChild(document.createTextNode(' ')); return; }
+              const w = document.createElement('span');
+              w.className = 'wd'; w.setAttribute('aria-hidden', 'true'); w.style.setProperty('--w', n++); w.textContent = t;
+              frag.appendChild(w);
+            });
+            node.replaceChild(frag, c);
+          } else if (c.nodeType === 1) walk(c);
+        });
+      };
+      walk(h);
+    } catch (e) {}
+    h.classList.add('ready');
+  }
+  revealCards(reset) {
+    try {
+      if (!('IntersectionObserver' in window)) return;
+      if (!this.cio) {
+        this.cio = new IntersectionObserver((entries) => {
+          entries.forEach(en => {
+            if (!en.isIntersecting) return;
+            const el = en.target;
+            this.cio.unobserve(el);
+            el.classList.add('rv-in');
+            el.addEventListener('animationend', () => { el.classList.remove('rv', 'rv-in'); el.style.removeProperty('--rvd'); }, { once: true });
+          });
+        }, { threshold: 0.1, rootMargin: '0px 0px -5% 0px' });
+      }
+      const cards = Array.from(document.querySelectorAll('.pcard'));
+      let k = 0;
+      cards.forEach(el => {
+        if (el.dataset.seen && !reset) return;
+        el.dataset.seen = '1';
+        el.classList.remove('rv', 'rv-in');
+        void el.offsetWidth;
+        el.style.setProperty('--rvd', ((k++) % 2 * 0.12) + 's');
+        el.classList.add('rv');
+        this.cio.observe(el);
+      });
+    } catch (e) {}
+  }
+  setupReveal() {
+    try {
+      if (!('IntersectionObserver' in window)) return;
+      const q = '.reveal, section:not(.sec) :is(h2,h3,p,li), section:not(.sec) .btn, .social';
+      const all = Array.from(document.querySelectorAll(q)).filter(el => !el.closest('.swap') && !el.closest('.pcard'));
+      const list = all.filter(el => !all.some(o => o !== el && o.contains(el)));
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach(en => {
+          if (!en.isIntersecting) return;
+          const el = en.target;
+          io.unobserve(el);
+          el.classList.add('rv-in');
+          el.addEventListener('animationend', () => { el.classList.remove('rv', 'rv-in'); el.style.removeProperty('--rvd'); }, { once: true });
+        });
+      }, { threshold: 0.12, rootMargin: '0px 0px -6% 0px' });
+      list.forEach(el => {
+        const sib = Array.from(el.parentElement.children).filter(c => list.includes(c));
+        el.style.setProperty('--rvd', (Math.min(sib.indexOf(el), 5) * 0.09) + 's');
+        el.classList.add('rv');
+        io.observe(el);
+      });
+      this.io = io;
+    } catch (e) {}
+  }
+  componentWillUnmount() { if (this.io) this.io.disconnect(); }
+  renderVals() {
+    const WHITE = 'none', TOWHITE = 'brightness(0) invert(1)';
+    const projects = [
+      { name: 'Trabalha Brasil', href: '/projetos/trabalha-brasil', tags: ['UI/UX', 'Website'], bg: '#0B1D45', img: '/assets/4d30bd1576f3f96ed7e9045d2add4e40.jpg', logo: '/assets/7c9c65673c0885119c180b2e61fc6efa.svg', logoW: '46%', logoFilter: WHITE, title: 'O melhor site de empregos do Brasil.' },
+      { name: 'Agricultor Digital', href: '/projetos/agricultor-digital', tags: ['UI/UX', 'App', 'Branding'], bg: '#3E5415', img: '/assets/d0e04a3671fc55cc710152b2829b089c.jpg', logo: '/assets/d0d11a0f3ce2bc61f54ad83e96e19568.svg', logoW: '50%', logoFilter: WHITE, title: 'App de comercio de produtos agrícolas simples e direta.' },
+      { name: 'Redação Brasil', href: '/projetos/redacao-brasil', tags: ['UI/UX', 'Website', 'Branding'], bg: '#3366E0', img: '/assets/b1fac676226cd002860933f2134c23cd.jpg', logo: '/assets/763c5dc8a092d490fa300d45945fe63e.svg', logoW: '36%', logoFilter: WHITE, title: 'Escrever, avaliar e evoluir com IA.' },
+      { name: 'Obraly', href: '/projetos/obraly', tags: ['UI/UX', 'Website'], bg: '#1A9641', img: '/assets/d129dccdfd84411ccb9b5093187f9b6b.jpg', logo: '/assets/959d0b01316ffb52efe4728976f2e1c9.svg', logoW: '36%', logoFilter: WHITE, title: 'Maior gestão de obras de todo o Brasil.' },
+      { name: 'RedTrabaje Empresas', href: '/projetos/redtrabaje-empresas', tags: ['UI/UX', 'Website'], bg: '#B35A1C', img: '/assets/10cfdea13cf50244331aafb860fe4f47.jpg', logo: '/assets/6f973ca9cc91194f006f8a345ef6cfc4.svg', logoW: '34%', logoFilter: 'none', title: 'Recrutamento mais simples e eficiente.' },
+      { name: 'RedTrabaje Candidatos', href: '/projetos/redtrabaje-candidatos', tags: ['UI/UX', 'Website'], bg: '#0E8F55', img: '/assets/356498d71ec76d2ef4ca613dc471ee3d.jpg', logo: '/assets/6f973ca9cc91194f006f8a345ef6cfc4.svg', logoW: '34%', logoFilter: 'none', title: 'Sua próxima oportunidade começa aqui.' },
+      { name: 'Jarvis', href: '/projetos/jarvis', tags: ['UI/UX', 'Website', 'Branding'], bg: '#5B2E78', img: '/assets/a13b63c021f5856f365e043f313efd15.jpg', logo: '/assets/e2c4ecfe6943619bff09dd44b1ac0076.svg', logoW: '44%', logoFilter: 'none', title: 'Inteligência artificial de forma simples e acessível.' },
+      { name: 'NewUpware', href: '/projetos/newupware', tags: ['UI/UX', 'Website', 'Branding'], bg: '#1F6480', img: '/assets/496c9d0a3d348647faf3c3f502252745.jpg', logo: '/assets/f308877d00ed4da417df01d9c8f74438.svg', logoW: '44%', logoFilter: 'none', title: 'Tecnologia para evoluir negócios digitais.' },
+      { name: 'Netuno', href: '/projetos/netuno', tags: ['UI/UX', 'Website', 'Branding'], bg: '#1B3FA0', img: '/assets/01faf789c46fe858c895df80092fc883.jpg', logo: '/assets/d45db0f2e0d65117ce62561bc6848b4d.svg', logoW: '50%', logoFilter: 'none', title: 'Sites profissionais de forma simples.' },
+      { name: 'Ktech', href: '/projetos/ktech', tags: ['UI/UX', 'Website'], bg: '#4B2A8F', img: '/assets/cf565c6fcfae6dbac269b437b358e12a.jpg', logo: '/assets/71a2c28507470401fd9702150f1b95e3.svg', logoW: '30%', logoFilter: 'none', title: 'Transformando ideias em experiências digitais.' },
+      { name: 'Agrofly', href: '/projetos/agrofly', tags: ['UI/UX', 'Website', 'Branding'], bg: '#4F86B8', img: '/assets/5d215b4db72fe4a2a82231512760fd90.jpg', logo: '/assets/5f914596122e98e310724d69d7f8b469.svg', logoW: '30%', logoFilter: 'none', title: 'Gestão rural inteligente para uma fazenda mais produtiva.' },
+      { name: 'ABC Builder', href: '/projetos/abcbuilder', tags: ['Branding'], bg: '#15233F', img: '/assets/ef28096522fecc26a29ffff051d73fee.jpg', logo: '/assets/7720a81c0d1ef1c062ce3d258751b536.svg', logoW: '40%', logoFilter: 'none', title: 'Gestão inteligente para obras mais organizadas e eficientes.' }
+    ];
+    projects.forEach(pr => { if (!pr.href) pr.href = '#lista'; });
+    const cur = this.state.filter;
+    const list = cur === 'Todos' ? projects : projects.filter(p => p.tags.indexOf(cur) !== -1);
+    return {
+      accent: this.props.accent ?? '#B51208',
+      filters: ['Todos', 'UI/UX', 'Website', 'App', 'Branding'].map((label, idx) => ({
+        label, i: idx, active: label === cur, pick: () => { this.setState({ filter: label, count: 4 }); setTimeout(() => this.revealCards(true), 40); }
+      })),
+      visible: list.slice(0, this.state.count),
+      showMore: list.length > this.state.count,
+      more: () => { this.setState({ count: this.state.count + 4 }); setTimeout(() => this.revealCards(false), 40); }
+    };
+  }
+}
+</script>
+</body>
+</html>

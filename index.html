@@ -1,0 +1,596 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Matheus Lima - Design com propósito</title>
+<script src="/support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400..700&amp;display=swap" rel="stylesheet">
+<style>
+html{scroll-behavior:smooth}
+body{margin:0;background:#000;color:#fff;font-family:'Inter',system-ui,sans-serif;font-optical-sizing:auto;-webkit-font-smoothing:antialiased}
+*{box-sizing:border-box}
+h1,h2,h3,p{margin:0}
+a{color:inherit}
+button{font-family:inherit}
+:focus-visible{outline:2px solid #fff;outline-offset:3px}
+
+.nav a{font-size:15px;font-weight:500;letter-spacing:-0.3px;text-transform:uppercase;text-decoration:none;color:#fff;transition:opacity .25s ease}
+.nav a:hover{opacity:.6}
+
+.btn{transition:transform .25s ease}
+.btn:hover{transform:translateY(-2px)}
+.btn .arr{transition:transform .25s ease}
+.btn:hover .arr{transform:translate(2px,-2px)}
+
+/* CTA: título cinza -> branco no hover, e o botão aparece (em telas com mouse). Em toque, tudo fica visível. */
+.cta-block .cta-title{color:#B3B3B3;transition:color .35s ease}
+.cta-block .cta-btn{transition:opacity .35s ease,transform .35s ease}
+.cta-block:hover .cta-title,.cta-block:focus-within .cta-title{color:#fff}
+@media (hover:hover){
+  .cta-block .cta-btn{opacity:0;transform:translateY(10px);pointer-events:none}
+  .cta-block:hover .cta-btn,.cta-block:focus-within .cta-btn{opacity:1;transform:none;pointer-events:auto}
+  .cta-block:hover .cta-btn:hover{transform:translateY(-2px)}
+}
+@media (hover:none){
+  .cta-block .cta-title{color:#fff}
+}
+
+.card .arrow{transition:background .25s ease,color .25s ease}
+.card:hover .arrow{background:#fff !important;color:#000 !important}
+.card .mock{transition:transform .6s ease,filter .5s ease}
+.card .plogo{transition:transform .6s cubic-bezier(.22,1,.36,1)}
+.card:hover .mock,.card:focus-visible .mock{transform:scale(1.04);filter:blur(10px) brightness(.55)}
+.card:hover .plogo,.card:focus-visible .plogo{transform:translate(-50%,-50%) scale(1.06)}
+
+.client{transition:transform .3s ease,background .3s ease}
+.client:hover{transform:translateY(-3px);background:#F2F2F2 !important}
+
+.svc-btn .svc-circle{transition:background .25s ease}
+.svc-btn:hover .svc-circle{background:rgba(255,255,255,.34) !important}
+
+.foot a{text-decoration:none;transition:opacity .25s ease}
+.foot a.lnk:hover{opacity:.65}
+.social{transition:transform .25s ease,background .25s ease}
+.social:hover{background:#D6D6D6 !important;transform:translateY(-2px)}
+.circle-btn{transition:background .25s ease}
+.circle-btn:hover{background:rgba(255,255,255,.35) !important}
+
+/* entrada suave ao rolar (só onde há suporte a view timeline; sem suporte, o conteúdo já aparece normal) */
+/* Troca de palavras: a atual sobe borrada e a próxima entra por baixo */
+.swap{display:inline-grid;vertical-align:top;color:#fff}
+.swap>span{grid-area:1/1;opacity:0;animation:dcSwap 7.8s cubic-bezier(.22,1,.36,1) infinite both}
+.swap>span:nth-child(2){animation-delay:2.6s}
+.swap>span:nth-child(3){animation-delay:5.2s}
+@keyframes dcSwap{0%{opacity:0;transform:translateY(70%);filter:blur(10px)}7%{opacity:1;transform:none;filter:blur(0)}28%{opacity:1;transform:none;filter:blur(0)}35%{opacity:0;transform:translateY(-70%);filter:blur(10px)}100%{opacity:0;transform:translateY(-70%);filter:blur(10px)}}
+@media (prefers-reduced-motion:reduce){.swap>span{animation:none}.swap>span:first-child{opacity:1}}
+@keyframes dcRise{from{opacity:0;transform:translateY(40px);filter:blur(8px)}to{opacity:1;transform:none;filter:blur(0)}}
+@keyframes dcIn{from{opacity:0;transform:translateY(24px);filter:blur(8px)}to{opacity:1;transform:none;filter:blur(0)}}
+/* troca de depoimento: sai borrando para um lado, entra vindo do outro */
+.fb-q.fb-out{animation:fbOut .28s ease both}
+.fb-q.fb-in{animation:fbIn .7s cubic-bezier(.22,1,.36,1) both}
+.fb-q.fb-in+*,.fb-q.fb-in{--fbx:var(--dir,1)}
+@keyframes fbOut{to{opacity:0;transform:translateX(calc(var(--dir,1) * -36px));filter:blur(8px)}}
+@keyframes fbIn{from{opacity:0;transform:translateX(calc(var(--dir,1) * 36px));filter:blur(8px)}to{opacity:1;transform:none;filter:blur(0)}}
+@media (prefers-reduced-motion:reduce){.fb-q.fb-out,.fb-q.fb-in{animation:none}}
+/* cards do histórico: ao expandir, os novos descem em cascata com leve zoom e blur */
+.jobs.open .job:nth-child(n+2){animation:jobIn .7s cubic-bezier(.22,1,.36,1) backwards}
+.jobs.open .job:nth-child(2){animation-delay:.04s}
+.jobs.open .job:nth-child(3){animation-delay:.12s}
+.jobs.open .job:nth-child(4){animation-delay:.2s}
+.jobs.open .job:nth-child(5){animation-delay:.28s}
+.jobs.open .job:nth-child(n+6){animation-delay:.36s}
+@keyframes jobIn{from{opacity:0;transform:translateY(-22px) scale(.96);filter:blur(6px)}to{opacity:1;transform:none;filter:blur(0)}}
+.jobs.open.closing .job:nth-child(n+2){animation:jobOut .42s cubic-bezier(.55,0,.55,.2) forwards}
+.jobs.open.closing .job:nth-child(5){animation-delay:0s}
+.jobs.open.closing .job:nth-child(4){animation-delay:.04s}
+.jobs.open.closing .job:nth-child(3){animation-delay:.08s}
+.jobs.open.closing .job:nth-child(2){animation-delay:.12s}
+@keyframes jobOut{from{opacity:1;transform:none;filter:blur(0)}to{opacity:0;transform:translateY(-22px) scale(.96);filter:blur(6px)}}
+@media (prefers-reduced-motion:reduce){.jobs.open .job,.jobs.open.closing .job{animation:none !important}}
+@keyframes dcFade{from{opacity:0}to{opacity:1}}
+@supports (animation-timeline:view()){
+  .reveal{animation:none}
+}
+/* revelar ao entrar na tela: o JS marca os elementos (.rv) e dispara (.rv-in) quando aparecem */
+.rv{opacity:0}
+.rv.rv-in{animation:dcRise 1s cubic-bezier(.22,1,.36,1) var(--rvd,0s) both}
+/* entrada ao carregar: logo, menu, título e botão do topo, em sequência */
+.hd>a{animation:dcFade .9s ease .05s backwards}
+.nav a{animation:dcIn .8s cubic-bezier(.22,1,.36,1) backwards}
+.nav a:nth-child(1){animation-delay:.2s}
+.nav a:nth-child(2){animation-delay:.3s}
+.nav a:nth-child(3){animation-delay:.4s}
+.hero-title{animation:dcIn 1s cubic-bezier(.22,1,.36,1) .45s backwards}
+.hb .btn{animation:dcIn 1s cubic-bezier(.22,1,.36,1) .65s backwards}
+
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .rv,.reveal,.hd>a,.nav a,.hero-title,.hb .btn{animation:none !important;opacity:1 !important;transform:none !important;filter:none !important}
+  .btn,.btn .arr,.card .mock,.card .arrow,.client,.social{transition:none !important}
+}
+
+@media (max-width:1000px){
+  .px110{padding-left:32px !important;padding-right:32px !important}
+  .px64{padding-left:0 !important;padding-right:0 !important}
+  .sec{padding-left:24px !important;padding-right:24px !important}
+  .cols4{grid-template-columns:repeat(2,minmax(0,1fr)) !important;gap:40px 32px !important}
+  .clients{grid-template-columns:repeat(2,minmax(0,1fr)) !important}
+  .fb-pad{padding-left:24px !important;padding-right:24px !important}
+  .logo-svg{width:110px !important;height:auto !important}
+  .hero-frame{left:32px !important;right:32px !important}
+}
+@media (max-width:640px){
+  .px110{padding-left:20px !important;padding-right:20px !important}
+  .px110.hd{padding-top:28px !important}
+  .px110.hb{padding-bottom:44px !important}
+  .hero-frame{inset:12px 12px 12px 12px !important}
+  .hero-frame img{object-position:63% 30% !important}
+  .hero-title{font-size:18px !important}
+  .logo-svg{width:76px !important}
+  .cols4{grid-template-columns:minmax(0,1fr) !important}
+  .proj{grid-template-columns:minmax(0,1fr) !important; width:min(714px,calc(100vw - 48px)) !important}
+  .nav{gap:14px !important}
+  .nav a{font-size:12px}
+  .foot3{grid-template-columns:minmax(0,1fr) !important}
+  .foot-menu{grid-template-columns:repeat(2,minmax(0,1fr)) !important}
+}
+</style>
+</helmet>
+
+<main style="background:#000;color:#fff;font-family:'Inter',system-ui,sans-serif">
+
+<!-- HERO: foto original em tela cheia escurecida + moldura interna com a foto em destaque -->
+<section id="inicio" style="position:sticky;top:0;height:clamp(560px,56.9vw,860px);overflow:hidden;background:#000;z-index:0">
+  <img src="/assets/137393959d93dc7cefd70c929eff7cc7.jpg" alt="" aria-hidden="true" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 40%;filter:brightness(.5) saturate(1.05)">
+  <div class="hero-frame" style="position:absolute;top:56px;bottom:56px;left:80px;right:80px;overflow:hidden;z-index:1">
+    <img src="/assets/137393959d93dc7cefd70c929eff7cc7.jpg" alt="Matheus Lima de costas, em perfil, sob iluminação vermelha" style="width:100%;height:100%;object-fit:cover;object-position:50% 42%;display:block">
+    <div aria-hidden="true" style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.18) 0%,rgba(0,0,0,0) 28%,rgba(0,0,0,0) 58%,rgba(0,0,0,.5) 100%)"></div>
+  </div>
+
+  <header class="px110 hd" style="position:absolute;top:0;left:0;right:0;padding:80px 110px 0;display:flex;align-items:flex-start;justify-content:space-between;z-index:2">
+    <a href="#inicio" aria-label="Matheus Lima - início">
+      <svg class="logo-svg" width="150" height="128" viewBox="0 0 108 92" fill="none" aria-hidden="true">
+        <path d="M34 3H75L45 65H3Z" stroke="#fff" stroke-width="3" stroke-linejoin="round"></path>
+        <path d="M42 60H104L90 88H28Z" fill="#fff" stroke="#fff" stroke-width="5" stroke-linejoin="round"></path>
+      </svg>
+    </a>
+    <nav class="nav" aria-label="Principal" style="display:flex;gap:24px;padding-top:6px">
+      <a href="#inicio">Início</a>
+      <a href="/projetos">Projetos</a>
+      <a href="https://api.whatsapp.com/send?phone=5541984984966&amp;text=Achamos%20seu%20curr%C3%ADculo%20incr%C3%ADvel%20Matheus,%20quero%20entrar%20em%20contato%20contigo!" target="_blank" rel="noopener noreferrer">Contato</a>
+    </nav>
+  </header>
+
+  <div class="px110 hb" style="position:absolute;left:0;right:0;bottom:0;padding:0 110px 80px;z-index:2">
+    <h1 class="hero-title" style="font-size: 28px; font-weight: 500; line-height: 1.3; letter-spacing: -0.04em; color: #fff; margin-bottom: 26px; max-width: 636px">Transformo problemas complexos em produtos digitais simples, intuitivos e relevantes. Estratégia, experiência e design com propósito para o seu produto.</h1>
+    <a class="btn" href="https://api.whatsapp.com/send?phone=5541984984966&amp;text=Achamos%20seu%20curr%C3%ADculo%20incr%C3%ADvel%20Matheus,%20quero%20entrar%20em%20contato%20contigo!" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:14px;height:64px;padding:0 15px 0 32px;background:#fff;border-radius:40px;color:#000;text-decoration:none;font-size:16px;font-weight:600;letter-spacing:-0.04em">
+      <span style="font-size: 18px">Entrar em contato</span>
+      <span style="display:inline-flex;width:34px;height:34px;border-radius:50%;background:{{accent}};align-items:center;justify-content:center">
+        <svg class="arr" width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11L11 3M5 3h6v6"></path></svg>
+      </span>
+    </a>
+  </div>
+</section>
+
+<!-- MANIFESTO -->
+<section class="sec" style="position:relative;z-index:1;background:#000;padding:200px 40px 0">
+  <div class="px64" style="max-width:1185px;margin:0 auto;padding:0 64px;display:flex;flex-direction:column;gap:96px">
+    <h2 class="reveal" style="max-width: 1002px; font-weight: 400; line-height: 1.3; letter-spacing: -0.04em; color: #A3A3A3; text-wrap: balance; width: 100%; font-size: 42px"><span style="color:#fff">Não crio apenas interfaces, projeto experiências que fazem sentido.</span> Transformo problemas complexos em produtos digitais simples, estratégicos e intuitivos.</h2>
+    <div class="cols4" style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:40px">
+      <div class="reveal">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="{{accent}}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"></path></svg>
+        <h3 style="margin-top:14px;font-size:22px;font-weight:500;letter-spacing:-0.04em;color:#fff">Visão estratégica</h3>
+        <p style="margin-top: 12px; max-width: 240px; font-size: 20px; line-height: 1.35; letter-spacing: -0.03em; color: #A3A3A3">Conecto as necessidades dos usuários aos objetivos do negócio.</p>
+      </div>
+      <div class="reveal">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="{{accent}}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="13.5" cy="6.5" r=".6" fill="{{accent}}"></circle><circle cx="17.5" cy="10.5" r=".6" fill="{{accent}}"></circle><circle cx="8.5" cy="7.5" r=".6" fill="{{accent}}"></circle><circle cx="6.5" cy="12.5" r=".6" fill="{{accent}}"></circle><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"></path></svg>
+        <h3 style="margin-top:14px;font-size:22px;font-weight:500;letter-spacing:-0.04em;color:#fff">Design intuitivo</h3>
+        <p style="margin-top: 12px; max-width: 240px; font-size: 20px; line-height: 1.35; letter-spacing: -0.03em; color: #A3A3A3">Crio interfaces claras, funcionais e fáceis de usar.</p>
+      </div>
+      <div class="reveal">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="{{accent}}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="7" height="7" x="3.5" y="3.5" rx="2.5"></rect><rect width="7" height="7" x="13.5" y="3.5" rx="2.5"></rect><rect width="7" height="7" x="13.5" y="13.5" rx="2.5"></rect><rect width="7" height="7" x="3.5" y="13.5" rx="2.5"></rect></svg>
+        <h3 style="margin-top:14px;font-size:22px;font-weight:500;letter-spacing:-0.04em;color:#fff">Processo completo</h3>
+        <p style="margin-top: 12px; max-width: 240px; font-size: 20px; line-height: 1.35; letter-spacing: -0.03em; color: #A3A3A3">Atuo na descoberta e pesquisa até a entrega da solução final.</p>
+      </div>
+      <div class="reveal">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="{{accent}}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"></path><path d="M9 18h6"></path><path d="M10 22h4"></path></svg>
+        <h3 style="margin-top:14px;font-size:22px;font-weight:500;letter-spacing:-0.04em;color:#fff">Pensado para evoluir</h3>
+        <p style="margin-top: 12px; max-width: 240px; font-size: 20px; line-height: 1.35; letter-spacing: -0.03em; color: #A3A3A3">Desenvolvo soluções consistentes, escaláveis e preparadas para crescer.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJETOS (mantido) -->
+<section id="projetos" class="sec" style="position:relative;z-index:1;background:#000;padding:200px 40px 0">
+  <div style="max-width:1185px;margin:0 auto;display:flex;flex-direction:column;gap:100px">
+    <h2 class="px64 reveal" style="max-width:760px;padding:0 64px;font-size:36px;font-weight:400;line-height:1.3;letter-spacing:-0.04em;color:#A3A3A3"><span style="color:#fff">Trabalho com startups, scale-ups e marcas consolidadas</span> para criar produtos digitais que se destacam e geram resultados.</h2>
+
+    <div class="proj" style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:62px 12px;align-self:center;width:min(1440px,calc(100vw - 80px))">
+
+      <a class="card reveal" href="/projetos/trabalha-brasil" style="position:relative;display:block;overflow:hidden;border-radius:16px;aspect-ratio:587/678;background:#0B1D45;text-decoration:none;color:#fff">
+        <div style="position:absolute;top:32px;left:32px;display:flex;gap:8px">
+          <span style="padding:6px 16px;border-radius:999px;background:rgba(255,255,255,.24);font-size:16px;font-weight:500;letter-spacing:-0.04em">UI/UX</span>
+          <span style="padding:6px 16px;border-radius:999px;background:rgba(255,255,255,.24);font-size:16px;font-weight:500;letter-spacing:-0.04em">Website</span>
+        </div>
+        <img class="mock" src="/assets/4d30bd1576f3f96ed7e9045d2add4e40.jpg" alt="Mockup do projeto Trabalha Brasil" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block">
+        <img class="plogo" src="/assets/7c9c65673c0885119c180b2e61fc6efa.svg" alt="Logo Trabalha Brasil" style="position:absolute;left:50%;top:50%;width:46%;height:auto;transform:translate(-50%,-50%);z-index:1;pointer-events:none">
+        <div style="position:absolute;left:0;right:0;bottom:0;height:34%;background:linear-gradient(180deg,rgba(0,0,0,0),rgba(0,0,0,.6))"></div>
+        <div style="position:absolute;left:32px;right:32px;bottom:32px;display:flex;align-items:flex-end;justify-content:space-between;gap:16px">
+          <h3 style="max-width:376px;font-size:28px;font-weight:500;line-height:1.3;letter-spacing:-0.04em;color:#FAFAFA">O melhor site de empregos do Brasil.</h3>
+          <span class="arrow" style="flex:none;width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.24);color:#fff;display:inline-flex;align-items:center;justify-content:center"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11L11 3M5 3h6v6"></path></svg></span>
+        </div>
+      </a>
+
+      <a class="card reveal" href="/projetos/agricultor-digital" style="position:relative;display:block;overflow:hidden;border-radius:16px;aspect-ratio:587/678;background:#3E5415;text-decoration:none;color:#fff">
+        <div style="position:absolute;top:32px;left:32px;display:flex;gap:8px">
+          <span style="padding:6px 16px;border-radius:999px;background:rgba(255,255,255,.24);font-size:16px;font-weight:500;letter-spacing:-0.04em">UI/UX</span>
+          <span style="padding:6px 16px;border-radius:999px;background:rgba(255,255,255,.24);font-size:16px;font-weight:500;letter-spacing:-0.04em">App</span>
+          <span style="padding:6px 16px;border-radius:999px;background:rgba(255,255,255,.24);font-size:16px;font-weight:500;letter-spacing:-0.04em">Branding</span>
+        </div>
+        <img class="mock" src="/assets/d0e04a3671fc55cc710152b2829b089c.jpg" alt="Mockup do projeto agricultor digital" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block">
+        <img class="plogo" src="/assets/d0d11a0f3ce2bc61f54ad83e96e19568.svg" alt="Logo Agricultor Digital" style="position:absolute;left:50%;top:50%;width:50%;height:auto;transform:translate(-50%,-50%);z-index:1;pointer-events:none">
+        <div style="position:absolute;left:0;right:0;bottom:0;height:34%;background:linear-gradient(180deg,rgba(0,0,0,0),rgba(0,0,0,.6))"></div>
+        <div style="position:absolute;left:32px;right:32px;bottom:32px;display:flex;align-items:flex-end;justify-content:space-between;gap:16px">
+          <h3 style="max-width:376px;font-size:28px;font-weight:500;line-height:1.3;letter-spacing:-0.04em;color:#FAFAFA">App de comercio de produtos agrícolas simples e direta.</h3>
+          <span class="arrow" style="flex:none;width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.24);color:#fff;display:inline-flex;align-items:center;justify-content:center"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11L11 3M5 3h6v6"></path></svg></span>
+        </div>
+      </a>
+
+      <a class="card reveal" href="/projetos/redacao-brasil" style="position:relative;display:block;overflow:hidden;border-radius:16px;aspect-ratio:587/678;background:#3366E0;text-decoration:none;color:#fff">
+        <div style="position:absolute;top:32px;left:32px;display:flex;gap:8px">
+          <span style="padding:6px 16px;border-radius:999px;background:rgba(255,255,255,.24);font-size:16px;font-weight:500;letter-spacing:-0.04em">UI/UX</span>
+          <span style="padding:6px 16px;border-radius:999px;background:rgba(255,255,255,.24);font-size:16px;font-weight:500;letter-spacing:-0.04em">Website</span>
+          <span style="padding:6px 16px;border-radius:999px;background:rgba(255,255,255,.24);font-size:16px;font-weight:500;letter-spacing:-0.04em">Branding</span>
+        </div>
+        <img class="mock" src="/assets/b1fac676226cd002860933f2134c23cd.jpg" alt="Mockup do projeto REDAÇÃO BRASIL" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block">
+        <img class="plogo" src="/assets/763c5dc8a092d490fa300d45945fe63e.svg" alt="Logo Redação Brasil" style="position:absolute;left:50%;top:50%;width:36%;height:auto;transform:translate(-50%,-50%);z-index:1;pointer-events:none">
+        <div style="position:absolute;left:0;right:0;bottom:0;height:34%;background:linear-gradient(180deg,rgba(0,0,0,0),rgba(0,0,0,.6))"></div>
+        <div style="position:absolute;left:32px;right:32px;bottom:32px;display:flex;align-items:flex-end;justify-content:space-between;gap:16px">
+          <h3 style="max-width:376px;font-size:28px;font-weight:500;line-height:1.3;letter-spacing:-0.04em;color:#FAFAFA">Escrever, avaliar e evoluir com IA.</h3>
+          <span class="arrow" style="flex:none;width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.24);color:#fff;display:inline-flex;align-items:center;justify-content:center"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11L11 3M5 3h6v6"></path></svg></span>
+        </div>
+      </a>
+
+      <a class="card reveal" href="/projetos/obraly" style="position:relative;display:block;overflow:hidden;border-radius:16px;aspect-ratio:587/678;background:#1A9641;text-decoration:none;color:#fff">
+        <div style="position:absolute;top:32px;left:32px;display:flex;gap:8px">
+          <span style="padding:6px 16px;border-radius:999px;background:rgba(255,255,255,.24);font-size:16px;font-weight:500;letter-spacing:-0.04em">UI/UX</span>
+          <span style="padding:6px 16px;border-radius:999px;background:rgba(255,255,255,.24);font-size:16px;font-weight:500;letter-spacing:-0.04em">Website</span>
+        </div>
+        <img class="mock" src="/assets/d129dccdfd84411ccb9b5093187f9b6b.jpg" alt="Mockup do projeto Obraly" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block">
+        <img class="plogo" src="/assets/959d0b01316ffb52efe4728976f2e1c9.svg" alt="Logo Obraly" style="position:absolute;left:50%;top:50%;width:36%;height:auto;transform:translate(-50%,-50%);z-index:1;pointer-events:none">
+        <div style="position:absolute;left:0;right:0;bottom:0;height:34%;background:linear-gradient(180deg,rgba(0,0,0,0),rgba(0,0,0,.6))"></div>
+        <div style="position:absolute;left:32px;right:32px;bottom:32px;display:flex;align-items:flex-end;justify-content:space-between;gap:16px">
+          <h3 style="max-width:376px;font-size:28px;font-weight:500;line-height:1.3;letter-spacing:-0.04em;color:#FAFAFA">Maior gestão de obras de todo o Brasil.</h3>
+          <span class="arrow" style="flex:none;width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.24);color:#fff;display:inline-flex;align-items:center;justify-content:center"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11L11 3M5 3h6v6"></path></svg></span>
+        </div>
+      </a>
+    </div>
+
+    <div class="reveal" style="display:flex;justify-content:center">
+      <a class="btn" href="/projetos" style="display:inline-flex;align-items:center;gap:14px;height:64px;padding:0 15px 0 32px;background:#fff;border-radius:40px;color:#000;text-decoration:none;font-size:16px;font-weight:600;letter-spacing:-0.04em">
+        <span>Conferir todos os projetos</span>
+        <span style="display:inline-flex;width:34px;height:34px;border-radius:50%;background:{{accent}};align-items:center;justify-content:center"><svg class="arr" width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11L11 3M5 3h6v6"></path></svg></span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- EMPRESAS E COLABORAÇÕES -->
+<section class="sec" style="position:relative;z-index:1;background:#000;padding:120px 40px 160px">
+  <div style="max-width: 1185px; margin: 0 auto; display: flex; flex-direction: column; gap: 80px; justify-content: center">
+    <div data-dc-group="" style="box-sizing: border-box; display: flex; flex-direction: column; gap: 80px; justify-content: center; align-items: center"><h2 class="px64 reveal" style="width: 100%; max-width: 726px; padding: 0; font-weight: 400; line-height: 1.4; letter-spacing: -0.04em; color: #A3A3A3; text-align: center; text-wrap: balance; font-size: 42px"><span style="color:#fff">Já colaborei com empresas inovadoras</span> em diferentes segmentos, como tecnologia, RH, ecommerces e SaaS.</h2></div>
+    <div class="clients reveal" style="display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px">
+      <sc-for list="{{clients}}" as="c" hint-placeholder-count="10">
+        <div class="client" style="height:150px;border-radius:16px;background:#E5E5E5;display:flex;align-items:center;justify-content:center;padding:0 16px">
+          <img src="{{c.src}}" alt="{{c.alt}}" style="display:block;width:{{c.w}};height:auto;max-height:64px;object-fit:contain;filter:brightness(0)">
+        </div>
+      </sc-for>
+    </div>
+  </div>
+</section>
+
+<!-- SERVIÇOS: retrato P&B ao fundo + acordeão -->
+<section class="sec" style="position:relative;z-index:1;overflow:hidden;background:#000;padding:100px 40px 120px">
+  <img src="/assets/9dee027c46649f91ee6a84a0b270a1e5.jpg" alt="" aria-hidden="true" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 32%;filter:grayscale(1) contrast(1.05)">
+  <div aria-hidden="true" style="position:absolute;inset:0;background:rgba(0,0,0,.8)"></div>
+  <div aria-hidden="true" style="position:absolute;inset:0;background:linear-gradient(180deg,#000 0%,rgba(0,0,0,0) 22%,rgba(0,0,0,0) 72%,#000 100%)"></div>
+  <div style="position:relative;max-width:1185px;margin:0 auto;display:flex;flex-direction:column;gap:100px">
+    <h2 class="px64 reveal" style="padding: 0 64px; font-weight: 400; line-height: 1.3; letter-spacing: -0.04em; color: #8F8F8F; text-wrap: balance; font-size: 42px; max-width: 1002px"><span style="color:#fff">Da criação de uma nova marca à evolução de um produto digital</span> transformo ideias em experiências completas.</h2>
+    <div style="width:100%;max-width:880px;margin:0 auto">
+      <sc-for list="{{services}}" as="s" hint-placeholder-count="4">
+        <div class="svc" style="border-top:{{ s.border }};padding-bottom:26px">
+          <button class="svc-btn" onClick="{{ s.toggle }}" aria-expanded="{{ s.isOpen }}" style="display:flex;width:100%;align-items:center;justify-content:space-between;gap:24px;padding:26px 0 0 24px;background:none;border:0;color:inherit;text-align:left;cursor:pointer">
+            <span style="display: block; font-size: 16px">
+              <span style="display:block;font-size:16px;font-weight:500;letter-spacing:-0.03em;color:{{accent}}">{{s.num}}</span>
+              <span style="display:block;margin-top:6px;font-size:clamp(26px,2.7vw,34px);font-weight:400;line-height:1.25;letter-spacing:-0.04em;color:#fff">{{s.title}}</span>
+            </span>
+            <span class="svc-circle" style="flex:none;display:inline-flex;width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.24);align-items:center;justify-content:center">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" aria-hidden="true">
+                <path d="M3.5 8h9"></path>
+                <path d="M8 3.5v9" style="opacity:{{ s.vBar }};transition:opacity .3s ease"></path>
+              </svg>
+            </span>
+          </button>
+          <div style="display:grid;grid-template-rows:{{ s.rows }};transition:grid-template-rows .4s ease">
+            <div style="overflow:hidden;min-height:0;opacity:{{ s.op }};visibility:{{ s.vis }};transition:opacity .35s ease,visibility .4s">
+              <p style="padding: 14px 60px 0 24px; max-width: 574px; font-size: 16px; line-height: 1.55; letter-spacing: -0.02em; color: #A3A3A3; padding-right: 0px">{{s.desc}}</p>
+            </div>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+</section>
+
+<!-- DEPOIMENTOS (mantido) -->
+<section class="fb-pad" style="position:relative;z-index:1;min-height:720px;padding:0 126px;display:flex;flex-direction:column;justify-content:center;gap:48px;background:linear-gradient(180deg,#000 0%,#000 35%,#3B0A05 100%)">
+  <div data-dc-group="" style="box-sizing: border-box; display: flex; flex-direction: column; gap: 48px; justify-content: center; align-items: normal; width: 100%; max-width: 948px; margin: 0 auto"><h2 class="fb-q" style="max-width: 100%; font-weight: 600; line-height: 1.1; letter-spacing: -0.04em; color: #fff; font-size: 64px">{{t.quote}}</h2><div style="width:100%;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap">
+    <div class="fb-q" style="display:flex;align-items:center;gap:16px">
+      <div style="width:64px;height:64px;flex:none;overflow:hidden;border-radius:50%;background:#2A2A2A;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:600;color:#fff"><img src="{{t.photo}}" alt="{{t.name}}" width="64" height="64" style="display:block;width:100%;height:100%;object-fit:cover"></div>
+      <div>
+        <div style="font-size:22px;font-weight:500;letter-spacing:-0.04em;color:#fff">{{t.name}}</div>
+        <div style="margin-top:4px;font-size:16px;letter-spacing:-0.03em;color:#A3A3A3">{{t.role}}</div>
+      </div>
+    </div>
+    <div style="display:flex;gap:12px">
+      <button class="circle-btn" onClick="{{ prev }}" aria-label="Depoimento anterior" style="width:48px;height:48px;border-radius:50%;border:0;background:rgba(255,255,255,.2);color:#fff;display:inline-flex;align-items:center;justify-content:center;cursor:pointer"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 8H3M7 4L3 8l4 4"></path></svg></button>
+      <button class="circle-btn" onClick="{{ next }}" aria-label="Próximo depoimento" style="width:48px;height:48px;border-radius:50%;border:0;background:rgba(255,255,255,.2);color:#fff;display:inline-flex;align-items:center;justify-content:center;cursor:pointer"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"></path></svg></button>
+    </div>
+  </div></div>
+  
+</section>
+
+<!-- SOBRE MIM (mantido) -->
+<section class="sec" style="position:relative;z-index:1;background:#000;padding:100px 40px">
+  <div class="px64" style="max-width:1185px;margin:0 auto;padding:0 64px;display:flex;flex-direction:column;gap:64px">
+    <h2 class="reveal" style="font-size: 42px; font-weight: 400; line-height: 1.2; letter-spacing: -0.04em; color: #fff">Criando experiências que resolvem problemas reais.</h2>
+    <div style="display:flex;flex-wrap:wrap;gap:64px">
+      <div style="flex:0 1 397px;min-width:260px">
+        <img class="reveal" src="/assets/76cf55da005c439f1eda30038212d3f2.jpg" alt="Retrato de Matheus Lima, de blazer preto e crachá de evento" style="display:block;width:100%;aspect-ratio:397/439;object-fit:cover;object-position:50% 20%;border-radius:16px;background:#1F1F1F">
+        <div style="margin-top: 24px; font-size: 22px; font-weight: 500; letter-spacing: -0.04em; color: #fff">Matheus Lima</div>
+        <div style="margin-top: 4px; font-size: 16px; letter-spacing: -0.03em; color: #A3A3A3">Product Designer</div>
+        <div style="margin-top:16px;display:flex;gap:8px">
+          <a class="social" href="https://www.linkedin.com/in/matheuslimaux/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" style="width:32px;height:32px;border-radius:50%;background:#fff;color:#000;display:inline-flex;align-items:center;justify-content:center;text-decoration:none"><svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><circle cx="4.6" cy="4.8" r="1.6"></circle><rect x="3.3" y="7.6" width="2.6" height="8.6" rx=".3"></rect><path d="M8.3 7.6h2.5v1.2c.5-.8 1.4-1.4 2.7-1.4 2.4 0 3 1.6 3 3.7v5.1h-2.6v-4.5c0-1.1-.1-2-1.3-2-1.3 0-1.7.9-1.7 2v4.5H8.3z"></path></svg></a>
+          <a class="social" href="https://www.behance.net/lima-designs" aria-label="Behance" style="width:32px;height:32px;border-radius:50%;background:#fff;color:#000;display:inline-flex;align-items:center;justify-content:center;text-decoration:none"><svg width="18" height="14" viewBox="0 0 18 14" aria-hidden="true"><text x="0" y="11.5" font-family="Inter,sans-serif" font-size="12" font-weight="800" fill="currentColor">Bē</text></svg></a>
+          <a class="social" href="https://medium.com/@limadesigner" aria-label="Medium" style="width:32px;height:32px;border-radius:50%;background:#fff;color:#000;display:inline-flex;align-items:center;justify-content:center;text-decoration:none"><svg width="17" height="17" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><ellipse cx="5.6" cy="10" rx="4" ry="4.6"></ellipse><ellipse cx="13.2" cy="10" rx="2.2" ry="4.4"></ellipse><rect x="17.2" y="5.6" width="1.5" height="8.8" rx=".75"></rect></svg></a>
+        </div>
+      </div>
+      <div style="flex:1 1 480px;min-width:0;display:flex;flex-direction:column;gap:32px">
+        <p style="font-size:22px;line-height:1.3;letter-spacing:-0.04em;color:#A3A3A3"><strong style="font-weight:700;color:#fff">Gosto de transformar ideias em produtos digitais que realmente fazem a diferença.</strong> Como Product Designer, busco unir estratégia, criatividade e tecnologia para criar soluções relevantes.</p>
+        <p style="font-size:22px;line-height:1.3;letter-spacing:-0.04em;color:#A3A3A3"><strong style="font-weight:700;color:#fff">Meu foco é desenvolver interfaces que tenham um propósito real</strong> não apenas bonitas, mas intuitivas, funcionais e alinhadas às necessidades dos usuários e aos objetivos do negócio.</p>
+        <p style="font-size:22px;line-height:1.3;letter-spacing:-0.04em;color:#A3A3A3"><strong style="font-weight:700;color:#fff">Sou atento aos detalhes e valorizo cada etapa do processo.</strong> Da descoberta à interface final, trabalho para entregar experiências consistentes, naturais e fáceis de usar.</p>
+
+        <div class="reveal" style="display:flex;flex-direction:column;gap:16px;margin-top:8px">
+          <div style="font-size: 20px; font-weight: 500; letter-spacing: -0.04em; color: #fff">Meu histórico de trabalhos</div>
+          <div class="{{ jobsCls }}" style="display:flex;flex-direction:column;gap:8px">
+            <sc-for list="{{jobs}}" as="j" hint-placeholder-count="3">
+              <div class="job" style="display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px 20px;border-radius:16px;background:#fff">
+                <div>
+                  <div style="font-size:16px;font-weight:500;letter-spacing:-0.02em;color:#000">{{j.company}}</div>
+                  <div style="margin-top:2px;font-size:12px;letter-spacing:-0.02em;color:#6B6B6B"><span style="letter-spacing: -0.24px">Product Designer</span></div>
+                </div>
+                <div style="font-size:12px;font-weight:500;letter-spacing:-0.02em;color:#6B6B6B">{{j.period}}</div>
+              </div>
+            </sc-for>
+            <sc-if value="{{ jobsClosed }}" hint-placeholder-val="{{ true }}">
+              <div aria-hidden="true" style="margin:-4px 12px 0;height:8px;border-radius:0 0 12px 12px;background:#CFCFCF"></div>
+              <div aria-hidden="true" style="margin:-4px 24px 0;height:8px;border-radius:0 0 12px 12px;background:#A8A8A8"></div>
+            </sc-if>
+          </div>
+          <div style="display:flex;justify-content:center">
+            <button class="btn" onClick="{{ toggleJobs }}" aria-expanded="{{ jobsOpen }}" style="display:inline-flex;align-items:center;gap:8px;height:36px;padding:0 14px;border:0;border-radius:999px;background:#fff;color:#000;font-size:12px;font-weight:600;cursor:pointer">
+              <span>{{jobsLabel}}</span>
+              <span style="display:inline-flex;width:14px;height:14px;border-radius:50%;background:#000;align-items:center;justify-content:center"><svg width="8" height="8" viewBox="0 0 8 8" fill="none" stroke="#fff" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 3l2 2 2-2"></path></svg></span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA + RODAPÉ -->
+<section id="contato" class="foot" style="position:relative;z-index:1;background:#000;padding:120px 16px 0;overflow:hidden">
+  <div style="max-width:992px;margin:0 auto">
+
+    <div class="cta-block reveal" style="display:flex;flex-direction:column;align-items:center;gap:44px;text-align:center;padding:24px 0">
+      <h2 class="cta-title" style="max-width:13em;font-size:clamp(40px,6.3vw,80px);font-weight:500;line-height:1.05;letter-spacing:-0.04em">Vamos criar algo incrível juntos.</h2>
+      <a class="btn cta-btn" href="https://api.whatsapp.com/send?phone=5541984984966&amp;text=Achamos%20seu%20curr%C3%ADculo%20incr%C3%ADvel%20Matheus,%20quero%20entrar%20em%20contato%20contigo!" style="display:inline-flex;align-items:center;gap:14px;height:64px;padding:0 15px 0 32px;background:#fff;border-radius:40px;color:#000;text-decoration:none;font-size:16px;font-weight:600;letter-spacing:-0.04em">
+        <span>Entrar em contato</span>
+        <span style="display:inline-flex;width:34px;height:34px;border-radius:50%;background:{{accent}};align-items:center;justify-content:center"><svg class="arr" width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11L11 3M5 3h6v6"></path></svg></span>
+      </a>
+    </div>
+
+    <div class="reveal" style="margin-top:140px">
+      <p style="font-size:clamp(30px,4.4vw,56px);font-weight:500;line-height:1.02;letter-spacing:-0.04em;color:#fff">Com <span class="swap" aria-label="design, criatividade, modernidade"><span aria-hidden="true">design</span><span aria-hidden="true">criatividade</span><span aria-hidden="true">modernidade</span></span></p>
+      <p style="font-size:clamp(30px,4.4vw,56px);font-weight:500;line-height:1.02;letter-spacing:-0.04em;color:{{accent}}">Vamos criar experiências incríveis.</p>
+    </div>
+
+    <div class="foot3" style="margin-top:52px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:32px 24px">
+      <div>
+        <div style="font-size:14px;font-weight:500;color:#8F8F8F">Email</div>
+        <a class="lnk" href="mailto:limadesignerux@gmail.com" style="display:inline-block;margin-top:6px;font-size:16px;font-weight:500;color:#fff;overflow-wrap:anywhere">limadesignerux@gmail.com</a>
+      </div>
+      <div>
+        <div style="font-size:14px;font-weight:500;color:#8F8F8F">Entrar em contato</div>
+        <a class="lnk" href="https://wa.me/5541984984966?text=Quero%20criar%20uma%20experi%C3%AAncia%20incr%C3%ADvel" style="display:inline-block;margin-top:6px;font-size:16px;font-weight:500;color:#fff">Criar algo incrível</a>
+      </div>
+      <div>
+        <div style="font-size:14px;font-weight:500;color:#8F8F8F">Redes sociais</div>
+        <div style="margin-top:10px;display:flex;gap:8px">
+          <a class="social" href="https://www.linkedin.com/in/matheuslimaux/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" style="width:32px;height:32px;border-radius:50%;background:#fff;color:#000;display:inline-flex;align-items:center;justify-content:center"><svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><circle cx="4.6" cy="4.8" r="1.6"></circle><rect x="3.3" y="7.6" width="2.6" height="8.6" rx=".3"></rect><path d="M8.3 7.6h2.5v1.2c.5-.8 1.4-1.4 2.7-1.4 2.4 0 3 1.6 3 3.7v5.1h-2.6v-4.5c0-1.1-.1-2-1.3-2-1.3 0-1.7.9-1.7 2v4.5H8.3z"></path></svg></a>
+          <a class="social" href="https://www.behance.net/lima-designs" aria-label="Behance" style="width:32px;height:32px;border-radius:50%;background:#fff;color:#000;display:inline-flex;align-items:center;justify-content:center"><svg width="18" height="14" viewBox="0 0 18 14" aria-hidden="true"><text x="0" y="11.5" font-family="Inter,sans-serif" font-size="12" font-weight="800" fill="currentColor">Bē</text></svg></a>
+          <a class="social" href="https://medium.com/@limadesigner" aria-label="Medium" style="width:32px;height:32px;border-radius:50%;background:#fff;color:#000;display:inline-flex;align-items:center;justify-content:center"><svg width="17" height="17" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><ellipse cx="5.6" cy="10" rx="4" ry="4.6"></ellipse><ellipse cx="13.2" cy="10" rx="2.2" ry="4.4"></ellipse><rect x="17.2" y="5.6" width="1.5" height="8.8" rx=".75"></rect></svg></a>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:44px;padding-top:30px;border-top:1px solid rgba(255,255,255,.14)">
+      <div style="font-size:14px;font-weight:500;color:#8F8F8F">Menu</div>
+      <div class="foot-menu" style="margin-top:16px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px 24px;font-size:16px;font-weight:500">
+        <a class="lnk" href="/projetos">Projetos</a>
+        <a class="lnk" href="https://www.behance.net/lima-designs">Serviços completos</a>
+        <span></span>
+        <a class="lnk" href="https://wa.me/5541984984966?text=Quero%20criar%20uma%20experi%C3%AAncia%20incr%C3%ADvel">Contato</a>
+        <a class="lnk" href="https://medium.com/@limadesigner">Reflexões</a>
+        <span style="font-size:14px;font-weight:500;color:#A3A3A3">© 2026 Matheus Lima</span>
+      </div>
+    </div>
+
+    <!-- assinatura tipográfica: ocupa a largura do conteúdo e é cortada embaixo -->
+    <div aria-hidden="true" style="margin-top:56px;-webkit-mask-image:linear-gradient(180deg,#000 30%,rgba(0,0,0,0) 100%);mask-image:linear-gradient(180deg,#000 30%,rgba(0,0,0,0) 100%)">
+      <div style="aspect-ratio:8339/700;overflow:hidden">
+        <img src="/assets/a868951a07e9f7c629ccfb560745090a.svg" alt="" style="display:block;width:100%;height:auto">
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"accent":{"editor":"color","default":"#B51208","options":["#B51208","#E0301E","#1F4FFF","#0E8A5F"]}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { open: { 0: true }, ti: 0, wi: 1, jobsOpen: false, jobsClosing: false };
+  }
+  componentDidMount() {
+    let reduce = false;
+    try { reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) {}
+    if (!reduce) {
+      setTimeout(() => this.setupReveal(), 60);
+      this.timer = setInterval(() => this.setState({ wi: (this.state.wi + 1) % 3 }), 2600);
+    }
+  }
+  goTo(ti, dir) {
+    if (this.busy) return;
+    let reduce = false;
+    try { reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) {}
+    const els = Array.from(document.querySelectorAll('.fb-q'));
+    if (reduce || !els.length) { this.setState({ ti }); return; }
+    this.busy = true;
+    els.forEach((el, i) => { el.style.setProperty('--dir', dir); el.style.animationDelay = (i * 0.05) + 's'; el.classList.remove('rv', 'rv-in', 'fb-in'); el.classList.add('fb-out'); });
+    setTimeout(() => {
+      this.setState({ ti });
+      requestAnimationFrame(() => {
+        els.forEach((el, i) => { el.classList.remove('fb-out'); void el.offsetWidth; el.style.animationDelay = (i * 0.08) + 's'; el.classList.add('fb-in'); });
+        setTimeout(() => { els.forEach(el => { el.classList.remove('fb-in'); el.style.animationDelay = ''; }); this.busy = false; }, 900);
+      });
+    }, 340);
+  }
+  setupReveal() {
+    try {
+      if (!('IntersectionObserver' in window)) return;
+      const q = '.reveal, .svc, section:not(#inicio) :is(h2,h3,p,li), .client, section:not(#inicio) .btn, .circle-btn, .social';
+      const all = Array.from(document.querySelectorAll(q)).filter(el => !el.closest('.swap'));
+      const list = all.filter(el => !all.some(o => o !== el && o.contains(el)));
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach(en => {
+          if (!en.isIntersecting) return;
+          const el = en.target;
+          io.unobserve(el);
+          el.classList.add('rv-in');
+          el.addEventListener('animationend', () => { el.classList.remove('rv', 'rv-in'); el.style.removeProperty('--rvd'); }, { once: true });
+        });
+      }, { threshold: 0.12, rootMargin: '0px 0px -6% 0px' });
+      list.forEach(el => {
+        const sib = Array.from(el.parentElement.children).filter(c => list.includes(c));
+        const i = Math.min(sib.indexOf(el), 5);
+        el.style.setProperty('--rvd', (i * 0.09) + 's');
+        el.classList.add('rv');
+        io.observe(el);
+      });
+      this.io = io;
+    } catch (e) {}
+  }
+  componentWillUnmount() {
+    if (this.io) this.io.disconnect();
+    if (this.timer) clearInterval(this.timer);
+  }
+  renderVals() {
+    const open = this.state.open;
+    const serviceData = [
+      { num: 'Serviço 01', title: 'UI/UX Design', desc: 'Desenvolvimento de experiências digitais intuitivas, unindo pesquisa, estratégia e interfaces que atendem usuários e negócios.' },
+      { num: 'Serviço 02', title: 'Design Systems', desc: 'Construção de bibliotecas de componentes e padrões visuais que garantem consistência, agilidade e escalabilidade ao produto.' },
+      { num: 'Serviço 03', title: 'Brand Identity', desc: 'Criação de identidades visuais consistentes, com conceito, cores, tipografia e elementos que traduzem a essência da marca.' },
+      { num: 'Serviço 04', title: 'Framer Developer', desc: 'Criação de sites responsivos e interativos no Framer, com animações fluidas, alta performance e fidelidade ao design.' }
+    ];
+    const services = serviceData.map((s, i) => {
+      const isOpen = !!open[i];
+      return {
+        ...s,
+        isOpen,
+        border: i === 0 ? '0 solid transparent' : '1px solid rgba(255,255,255,.12)',
+        rows: isOpen ? '1fr' : '0fr',
+        op: isOpen ? '1' : '0',
+        vis: isOpen ? 'visible' : 'hidden',
+        vBar: isOpen ? '0' : '1',
+        toggle: () => {
+          const o = { ...this.state.open };
+          o[i] = !o[i];
+          this.setState({ open: o });
+        }
+      };
+    });
+
+    const testimonials = [
+      { name: 'Ubirajara Jucá', role: 'Coordenador de Desenvolvimento', initials: 'UJ', photo: '/assets/4d303b96ad1bdaa6e1b855429798678e.jpg', quote: '“Matheus une visão estratégica e foco no usuário para criar interfaces intuitivas e consistentes, sempre com uma postura colaborativa.”' },
+      { name: 'Paola Chu', role: 'QA', initials: 'PC', photo: '/assets/761d8ce9810bfc02128754d087e7db32.jpg', quote: '“Matheus transforma as necessidades dos usuários em interfaces intuitivas e funcionais, sempre com soluções inovadoras e bem fundamentadas.”' },
+      { name: 'Fábio Franco', role: 'Product Designer', initials: 'FF', photo: '/assets/695ab36229ced88ab15246fbb42bb0b5.jpg', quote: '“Matheus é um profissional competente, curioso e proativo, que busca soluções criativas e entrega resultados com excelência.”' },
+      { name: 'Carlos Grochocki', role: 'Front-End Developer', initials: 'CG', photo: '/assets/a29e1e8b4477b82b37647c222bf5ba8b.jpg', quote: '“Matheus demonstra responsabilidade, atenção aos detalhes e foco no usuário, criando soluções funcionais com uma postura sempre colaborativa.”' }
+    ];
+    const n = testimonials.length;
+
+    const allJobs = [
+      { company: 'Trabalha Brasil', role: 'Product Designer', period: '2023-Atualmente' },
+      { company: 'Banco Nacional de Empregos', role: 'Banco Nacional de Empregos', period: '2023-2023' },
+      { company: 'Ktech', role: 'Designer', period: '2025-2026' }
+    ];
+    const jobsOpen = this.state.jobsOpen;
+
+    return {
+      accent: this.props.accent ?? '#B51208',
+      services,
+      clients: [
+        { alt: 'Trabalha Brasil', src: '/assets/4a7d2043808c8555a403d0b47938ebd5.svg', w: '80%' },
+        { alt: 'bne', src: '/assets/83bd289aaae1e7d929105894827cf6dd.svg', w: '46%' },
+        { alt: 'K tech', src: '/assets/17ce885e82ff9f6b0978589e559add22.svg', w: '42%' },
+        { alt: 'Logotipo com globo e lupa', src: '/assets/0cf9ffa86e7aecdecdb35a87156fe544.svg', w: '26%' },
+        { alt: 'jarvis', src: '/assets/bf0fcd245eb17537b16960741d5b8ea0.svg', w: '56%' },
+        { alt: 'Redação Brasil', src: '/assets/5cfa8acbd8a1daf5fbe289c45f8b9fef.svg', w: '52%' },
+        { alt: 'Netuno', src: '/assets/3f77823079aa38b9fc8523d6cd250a6a.svg', w: '72%' },
+        { alt: 'NewUpware', src: '/assets/9592fc47a18253bebd2f3a78de1d4667.svg', w: '82%' },
+        { alt: 'Obraly', src: '/assets/5449c609dcb1082df063d292947f2b25.svg', w: '62%' },
+        { alt: 'Agricultor Digital', src: '/assets/7b52e702bfe779c391e8c1a6226dc4a1.svg', w: '52%' }
+      ],
+      t: testimonials[this.state.ti],
+      prev: () => this.goTo((this.state.ti + n - 1) % n, -1),
+      next: () => this.goTo((this.state.ti + 1) % n, 1),
+      jobs: jobsOpen ? allJobs : allJobs.slice(0, 1),
+      jobsClosed: !jobsOpen,
+      jobsOpen,
+      jobsCls: jobsOpen ? (this.state.jobsClosing ? 'jobs open closing' : 'jobs open') : 'jobs',
+      jobsLabel: (jobsOpen && !this.state.jobsClosing) ? 'Exibir menos' : 'Exibir todos',
+      toggleJobs: () => {
+        if (this.state.jobsClosing) return;
+        if (!this.state.jobsOpen) { this.setState({ jobsOpen: true }); return; }
+        let reduce = false;
+        try { reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) {}
+        if (reduce) { this.setState({ jobsOpen: false }); return; }
+        this.setState({ jobsClosing: true });
+        setTimeout(() => this.setState({ jobsOpen: false, jobsClosing: false }), 520);
+      },
+      word: ['design', 'criatividade', 'modernidade'][this.state.wi]
+    };
+  }
+}
+</script>
+</body>
+</html>
